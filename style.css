@@ -202,6 +202,7 @@ h2.font-ari{
 	left: 50%;
 	transform: translate(-50%, -50%);
 	/*border: #00a4b8 solid 1px;*/
+	margin: 10px 0;
 }
 .title {
 	padding: 20px 0;
@@ -225,4 +226,37 @@ input {
 }
 .signup-link {
 	padding: 15px 0;
+}
+
+/*----------------SIGN UP----------------*/
+
+.txt-container {
+	display: inline-block;
+	margin: 0 15px;
+	width: 210px;
+}
+.fit-to-row {
+	width: 100% !important;
+}
+.user-tab {
+	width: 210px;
+	display: inline-block;
+	margin: 0 15px 25px 15px !important;
+}
+.user-tab p {
+	font-weight: 700;
+}
+.customer-tab {
+	border-bottom: 3px #007bff solid;
+}
+
+.admin-tab-opened .customer-tab {
+	border: none;
+}
+.admin-tab-opened .admin-tab {
+	border-bottom: 3px #007bff solid;
+}
+.btn-signup {
+	margin-left: 15px;
+	margin-right: 15px;
 }
