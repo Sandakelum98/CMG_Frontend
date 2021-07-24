@@ -47,10 +47,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="mb-3 txt-container">
+                    <div class="mb-3 txt-container address-container">
                         <label for="txt-address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="txt-address" aria-describedby="emailHelp">
                         <!--<div id="passwordHelp" class="form-text">Invalid password</div>-->
+                    </div>
+
+                    <div class="mb-3 txt-container nic-container">
+                        <label for="txt-nic" class="form-label">NIC</label>
+                        <input type="text" class="form-control" id="txt-nic" aria-describedby="emailHelp">
+                        <div id="nicHelp" class="form-text">Invalid nic</div>
                     </div>
 
                     <div class="mb-3 txt-container">
@@ -65,6 +71,12 @@
                         <label for="txt-email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="txt-email" aria-describedby="emailHelp">
                         <div id="emailHelp" class="form-text">Invalid password</div>
+                    </div>
+
+                    <div class="mb-3 txt-container employeeNo-container">
+                        <label for="txt-employeeNo" class="form-label">Employee No</label>
+                        <input type="text" class="form-control" id="txt-employeeNo" aria-describedby="emailHelp">
+                        <div id="employeeNoHelp" class="form-text">Invalid mobile no</div>
                     </div>
                 </div>
 
@@ -103,18 +115,33 @@
 <script type="text/javascript" src="js/jquery.flashy.min.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
 <script>
+
+    $('.form-text').hide();
+    $('.nic-container').hide();
+    $('.employeeNo-container').hide();
+
+
     $('.admin-tab').on("click", function () {
-        // $('.menu-container').slideToggle();
         $('body').addClass('admin-tab-opened');
+
+        $('.nic-container').show();
+        $('.employeeNo-container').show();
+
+        $('.address-container').hide();
+
     });
 
     $('.customer-tab').on("click", function () {
-        // $('.menu-container').slideToggle();
         $('body').removeClass('admin-tab-opened');
+
+        $('.nic-container').hide();
+        $('.employeeNo-container').hide();
+
+        $('.address-container').show();
     });
 
 
-    $('.form-text').hide();
+
 
 
 

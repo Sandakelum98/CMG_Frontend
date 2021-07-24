@@ -234,9 +234,13 @@ input {
 	display: inline-block;
 	margin: 0 15px;
 	width: 210px;
+	height: 57px;
 }
 .fit-to-row {
 	width: 100% !important;
+}
+.admin-tab-opened .fit-to-row {
+	width: 210px !important;
 }
 .user-tab {
 	width: 210px;
