@@ -29,7 +29,7 @@
 
             <div class="mb-3">
                 <label for="txt-login-password" class="form-label">Password</label>
-                <input type="text" class="form-control" id="txt-login-password" aria-describedby="emailHelp">
+                <input type="password" class="form-control" id="txt-login-password" aria-describedby="emailHelp">
                 <div id="passwordHelp" class="form-text">Invalid password</div>
             </div>
             <button type="button" class="btn btn-primary btn-signin" id="btnSignIn">Sign in</button>
@@ -48,41 +48,65 @@
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script>
-    /*$('.menu-mobile-toggle').on("click", function () {
-        $('.menu-container').slideToggle();
-        $('body').toggleClass('menu-has-opened');
-    });*/
 
     $('.form-text').hide();
 
     $('#btnSignIn').click(function () {
-        let username = $('#txt-login-username').val();
-        let password = $('#txt-login-password').val();
 
-        $.ajax({
-            method: "GET",
-            url: "http://localhost:8080/api/v1/user/"+ username + "/" + password,
-            contentType: "application/json",
-            async: true,
-            success: function (response) {
-                if(response.data == null) {
-                    alert("Invalid username or password")
-                } else {
+        var isValidated = loginValidate();
 
-                    alert("Sign in successfully !");
-                    if(response.data.type == "customer") {
-                        window.location.replace('customer-dashboard.html');
+        if(isValidated) {
+            let username = $('#txt-login-username').val();
+            let password = $('#txt-login-password').val();
+
+            $.ajax({
+                method: "GET",
+                url: "http://localhost:8080/api/v1/user/" + username + "/" + password,
+                contentType: "application/json",
+                async: true,
+                success: function (response) {
+                    if (response.data == null) {
+                        alert("Invalid username or password")
                     } else {
-                        window.location.replace('admin-dashboard.html');
-                    }
 
+                        alert("Sign in successfully !");
+                        if (response.data.type == "customer") {
+                            window.location.replace('customer-dashboard.html');
+                        } else {
+                            window.location.replace('admin-dashboard.html');
+                        }
+
+                    }
+                },
+                error: function (response) {
+                    alert(response.data);
                 }
-            },
-            error: function (response) {
-                alert(response.data);
-            }
-        });
+            });
+        }
     });
+
+    function loginValidate() {
+        let usernameValidate = true;
+        let passwordValidate = true;
+
+        if ($('#txt-login-username').val().length <= 0) {
+            $('#txt-login-username').css('border', '1px solid red');
+            usernameValidate = false;
+        }
+
+        if ($('#txt-login-password').val().length <= 0) {
+            $('#txt-login-password').css('border', '1px solid red');
+            passwordValidate = false;
+        }
+
+        if (usernameValidate == false) {
+            return false;
+        } else if (passwordValidate == false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
 
