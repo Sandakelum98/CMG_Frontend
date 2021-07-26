@@ -23,6 +23,7 @@
         <div class="signin-form">
 
             <div class="container">
+
                 <div class="row text-center">
                     <div class="mb-3 user-tab customer-tab">
                         <p>As Customer</p>
@@ -36,7 +37,7 @@
                     <div class="mb-3 txt-container">
                         <label for="txt-name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="txt-name" aria-describedby="emailHelp">
-                        <!--<div id="usernameHelp" class="form-text">Invalid username</div>-->
+                        <p id="usernameHelp" class="form-text">Invalid username</p>
                     </div>
 
                     <div class="mb-3 txt-container">
@@ -95,7 +96,7 @@
                 </div>
 
                 <div class="row">
-                    <button type="button" class="btn btn-primary btn-signin btn-signup">Sign up</button>
+                    <button type="button" class="btn btn-primary btn-signin btn-signup" id="btnSignup">Sign up</button>
                 </div>
 
             </div>
@@ -103,7 +104,8 @@
         </div>
 
         <div>
-            <p class="signup-link text-center">Already do you have account? <a href="index.html">Go back to login</a> </p>
+            <p class="signup-link text-center">Already do you have account? <a href="index.html">Go back to login</a>
+            </p>
         </div>
 
     </div>
@@ -112,14 +114,13 @@
 </div>
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.flashy.min.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
 <script>
 
     $('.form-text').hide();
     $('.nic-container').hide();
     $('.employeeNo-container').hide();
 
+    var currentTab = 0;
 
     $('.admin-tab').on("click", function () {
         $('body').addClass('admin-tab-opened');
@@ -128,6 +129,9 @@
         $('.employeeNo-container').show();
 
         $('.address-container').hide();
+
+        currentTab = 1;
+        clear()
 
     });
 
@@ -138,11 +142,205 @@
         $('.employeeNo-container').hide();
 
         $('.address-container').show();
+
+        currentTab = 0;
+        clear();
+    });
+
+    //--------------------CLEAR--------------------
+    function clear() {
+        let name = $('#txt-name').val("");
+        let username = $('#txt-username').val("");
+        let address = $('#txt-address').val("");
+        let mobileNo = $('#txt-mobileno').val("");
+        let email = $('#txt-email').val("");
+
+        let password1 = $('#txt-password').val("");
+        let password2 = $('#txt-confirm-password').val("");
+
+        let nic = $('#txt-nic').val("");
+        let employeeId = $('#txt-employeeNo').val("");
+    }
+
+
+    //--------------------SIGN UP--------------------
+    $('#btnSignup').click(function () {
+
+        let type = "";
+
+        if (currentTab == 0) {
+            type = "customer";
+        } else {
+            type = "admin";
+        }
+
+
+        if (currentTab == 0) {
+            //alert("Customer Saved");
+            let isCustomerValidated = customerValidation();
+
+            if (isCustomerValidated) {
+                let name = $('#txt-name').val();
+                let username = $('#txt-username').val();
+                let address = $('#txt-address').val();
+                let mobileNo = $('#txt-mobileno').val();
+                let email = $('#txt-email').val();
+
+                let password1 = $('#txt-password').val();
+                let password2 = $('#txt-confirm-password').val();
+
+                if (password1 != password2) {
+                    alert("Passwords must be same !");
+                    $('#txt-password').css('border', '1px solid red');
+                    $('#txt-confirm-password').css('border', '1px solid red');
+                } else {
+
+                    $.ajax({
+                        method: "POST",
+                        url: "http://localhost:8080/api/v1/user",
+                        contentType: "application/json",
+                        async: true,
+                        data: JSON.stringify({
+                            name: name,
+                            username: username,
+                            address: address,
+                            mobileNo: mobileNo,
+                            email: email,
+                            password: password1,
+                            type: type
+                        }),
+                        success: function (response) {
+                            alert("Sign up successfully !");
+                            console.log(response);
+
+                            window.location.replace('customer-dashboard.html');
+                        },
+                        error: function (response) {
+                            //alert(response.responseJSON.data);
+                        }
+                    });
+                }
+            }
+        } else {
+
+            let name = $('#txt-name').val();
+            let username = $('#txt-username').val();
+            let mobileNo = $('#txt-mobileno').val();
+            let email = $('#txt-email').val();
+
+            let password1 = $('#txt-password').val();
+            let password2 = $('#txt-confirm-password').val();
+
+            let nic = $('#txt-nic').val();
+            let employeeId = $('#txt-employeeNo').val();
+
+
+            if (password1 != password2) {
+                alert("Passwords must be same !");
+                $('#txt-password').css('border', '1px solid red');
+                $('#txt-confirm-password').css('border', '1px solid red');
+            } else {
+                $.ajax({
+                method: "POST",
+                url: "http://localhost:8080/api/v1/user",
+                contentType: "application/json",
+                async: true,
+                data: JSON.stringify({
+                    name: name,
+                    username: username,
+                    mobileNo: mobileNo,
+                    email: email,
+                    password: password1,
+                    type: type,
+                    nic: nic,
+                    employeeId: employeeId
+                }),
+                success: function (response) {
+                    alert("Sign up successfully !");
+                    console.log(response);
+
+                    //window.location.href = 'admin-dashboard.html';
+                    window.location.replace('admin-dashboard.html');
+
+                },
+                error: function (response) {
+                    alert(response.data);
+                }
+            });
+            }
+
+        }
     });
 
 
+    //--------------------VALIDATION--------------------
+    function customerValidation() {
+        let userNameRegEx = /^[A-Z]{1}[a-z]{1,}( )[A-Z]{1}[a-z]{1,}$/;
+        let mobileNoRegEx = /^(0)[0-9]{9}$/;
+        let emailRegEx = /^[A-Za-z_]{3,}@[A-Za-z]{3,}[.]{1}[A-Za-z.]{3}$/;
+
+        let nameValidation = "";
+        let mobileNoValidation = "";
+        let emailValidation = "";
+        let usernameValidation = "";
+        let addressValidation = "";
+
+        if (userNameRegEx.test($('#txt-name').val())) {
+            $("#txt-name").css('border', '1px solid #0d1117');
+            nameValidation = true;
+        } else {
+            $("#txt-name").css('border', '1px solid red');
+            nameValidation = false;
+        }
 
 
+        if (mobileNoRegEx.test($('#txt-mobileno').val())) {
+            $("#txt-mobileno").css('border', '1px solid #0d1117');
+            mobileNoValidation = true;
+        } else {
+            $("#txt-mobileno").css('border', '1px solid red');
+            mobileNoValidation = false;
+        }
+
+        if (emailRegEx.test($('#txt-email').val())) {
+            $("#txt-email").css('border', '1px solid #0d1117');
+            emailValidation = true;
+        } else {
+            $("#txt-email").css('border', '1px solid red');
+            emailValidation = false;
+        }
+
+        if ($('#txt-username').val().length <= 0) {
+            $('#txt-username').css('border', '1px solid red');
+            usernameValidation = false;
+        } else {
+            usernameValidation = true;
+            $('#txt-username').css('border', '1px solid #0d1117');
+        }
+
+        if ($('#txt-address').val().length <= 0) {
+            $('#txt-address').css('border', '1px solid red');
+            addressValidation = false;
+        } else {
+            addressValidation = true;
+            $('#txt-address').css('border', '1px solid #0d1117');
+        }
+
+
+        if (nameValidation == false) {
+            return false;
+        } else if (usernameValidation == false) {
+            return false;
+        } else if (addressValidation == false) {
+            return false;
+        } else if (mobileNoValidation == false) {
+            return false;
+        } else if (emailValidation == false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
 </script>

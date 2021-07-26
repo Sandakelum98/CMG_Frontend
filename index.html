@@ -32,7 +32,7 @@
                 <input type="text" class="form-control" id="txt-login-password" aria-describedby="emailHelp">
                 <div id="passwordHelp" class="form-text">Invalid password</div>
             </div>
-            <button type="button" class="btn btn-primary btn-signin">Sign in</button>
+            <button type="button" class="btn btn-primary btn-signin" id="btnSignIn">Sign in</button>
 
 
         </form>
@@ -47,8 +47,6 @@
 </div>
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.flashy.min.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
 <script>
     /*$('.menu-mobile-toggle').on("click", function () {
         $('.menu-container').slideToggle();
@@ -56,6 +54,35 @@
     });*/
 
     $('.form-text').hide();
+
+    $('#btnSignIn').click(function () {
+        let username = $('#txt-login-username').val();
+        let password = $('#txt-login-password').val();
+
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:8080/api/v1/user/"+ username + "/" + password,
+            contentType: "application/json",
+            async: true,
+            success: function (response) {
+                if(response.data == null) {
+                    alert("Invalid username or password")
+                } else {
+
+                    alert("Sign in successfully !");
+                    if(response.data.type == "customer") {
+                        window.location.replace('customer-dashboard.html');
+                    } else {
+                        window.location.replace('admin-dashboard.html');
+                    }
+
+                }
+            },
+            error: function (response) {
+                alert(response.data);
+            }
+        });
+    });
 
 
 

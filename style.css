@@ -213,9 +213,10 @@ h2.font-ari{
 	background-color: #161B22;
 	border-radius: 12px;
 }
-input {
+.txt-container input {
 	background-color: #0d1117 !important;
-	border: none !important;
+	/*border: none !important;*/
+	border: 1px solid #0d1117;
 }
 .form-text {
 	color: #c44569 !important;
